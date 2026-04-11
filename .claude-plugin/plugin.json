@@ -1,0 +1,9 @@
+{
+    "name": "claude-stts",
+    "description": "Talk to Claude and hear Claude talk back. Use /stt to speak your prompt and /tts to hear the response.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Sandip Chitale"
+    },
+    "commands": "./commands"
+}

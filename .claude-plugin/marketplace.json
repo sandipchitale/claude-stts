@@ -1,0 +1,12 @@
+{
+  "name": "claude-stts-marketplace",
+  "owner": { "name": "developer" },
+  "plugins": [
+    {
+      "name": "claude-stts",
+      "source": "./", 
+      "description": "Local development version of claude stts plugin",
+      "version": "1.0.0"
+    }
+  ]
+}
