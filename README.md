@@ -54,6 +54,12 @@ claude-stts/
 │   ├── stt_ui.html          # STT frontend - textarea with SpeechRecognition integration
 │   ├── tts.ts               # TTS entry point - launches Chrome with speech synthesis UI
 │   └── tts_ui.html          # TTS frontend - textarea with SpeechSynthesis integration
+├── dist/                    # Pre-built bundles (committed so users don't need `npm install`)
+│   ├── stt.mjs              # Bundled STT entry point
+│   ├── tts.mjs              # Bundled TTS entry point
+│   ├── stt_ui.html          # Copied at build time
+│   └── tts_ui.html          # Copied at build time
+├── build.mjs                # esbuild build script
 ├── package.json
 └── tsconfig.json
 ```
@@ -74,12 +80,15 @@ Install directly from the repository:
 claude plugin add https://github.com/sandipchitale/claude-stts
 ```
 
+The repository ships with pre-built bundles in `dist/`, so **no `npm install` is required** for end users. The slash commands invoke `node ${CLAUDE_PLUGIN_ROOT}/dist/stt.mjs` and `dist/tts.mjs` directly.
+
 ### For Local Development
 
 ```bash
 git clone https://github.com/sandipchitale/claude-stts.git
 cd claude-stts
 npm install
+npm run build   # bundles src/*.ts into dist/ via esbuild
 ```
 
 Then add it as a local plugin in Claude Code:
@@ -87,6 +96,8 @@ Then add it as a local plugin in Claude Code:
 ```bash
 claude plugin add /path/to/claude-stts
 ```
+
+The build script (`build.mjs`) uses [esbuild](https://esbuild.github.io/) to bundle `src/stt.ts` and `src/tts.ts` into standalone ESM files under `dist/`, and copies the HTML UI assets alongside them. Re-run `npm run build` after any change in `src/`.
 
 ## Usage
 
@@ -104,6 +115,7 @@ Once installed, use the slash commands in Claude Code:
 - [chrome-launcher](https://www.npmjs.com/package/chrome-launcher) - Launches Chrome with custom flags
 - [puppeteer-core](https://www.npmjs.com/package/puppeteer-core) - Connects to and controls the Chrome instance
 - [commander](https://www.npmjs.com/package/commander) - CLI argument parsing
+- [esbuild](https://esbuild.github.io/) (dev) - Bundles `src/*.ts` into `dist/*.mjs` so the plugin runs without `npm install`
 
 ## License
 

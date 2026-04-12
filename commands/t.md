@@ -10,7 +10,7 @@ Launch the speech-to-text dialog so the user can dictate their prompt.
 Run this command using the Bash tool:
 
 ```
-npx tsx ${CLAUDE_PLUGIN_ROOT}/src/stt.ts
+node ${CLAUDE_PLUGIN_ROOT}/dist/stt.mjs
 ```
 
 This opens a Chrome-based dialog where the user can type or speak (using the browser's SpeechRecognition API). The dialog supports voice commands for punctuation, navigation, and editing.

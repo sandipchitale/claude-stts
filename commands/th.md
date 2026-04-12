@@ -10,7 +10,7 @@ This command combines STT and TTS into a single flow: the user speaks their prom
 Run the speech-to-text dialog using the Bash tool:
 
 ```
-npx tsx ${CLAUDE_PLUGIN_ROOT}/src/stt.ts
+node ${CLAUDE_PLUGIN_ROOT}/dist/stt.mjs
 ```
 
 This opens a Chrome dialog where the user can speak or type their prompt. When they click "Send" or press Enter, the text is printed to stdout.
@@ -24,7 +24,7 @@ Take the captured text and process it as the user's prompt. Do whatever the text
 After you have responded, speak your response aloud by piping it to the TTS script using the Bash tool. Use a heredoc for multi-line text:
 
 ```
-npx tsx ${CLAUDE_PLUGIN_ROOT}/src/tts.ts --oneshot <<'EOF'
+node ${CLAUDE_PLUGIN_ROOT}/dist/tts.mjs --oneshot <<'EOF'
 
 Your plain text response here.
 EOF
