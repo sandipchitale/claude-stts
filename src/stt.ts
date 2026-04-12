@@ -16,7 +16,7 @@ async function main() {
     .version('1.0.0')
     .option('--title <title>', 'Title of the page', 'Type or dictate')
     .option('--action <label>', 'Label for the complete button', 'Send')
-    .argument('[text...]', 'Initial text')
+    .option('--start-recording', 'Start in recording mode')
     .helpOption('-h, --help', 'Display help for command')
     .parse(process.argv);
 
@@ -71,11 +71,12 @@ async function main() {
     }
 
     // Provide initial data BEFORE navigation using evaluateOnNewDocument
-    await page.evaluateOnNewDocument((text, title, action) => {
+    await page.evaluateOnNewDocument((text, title, action, startRecording) => {
         (window as any).getInitialText = async () => text;
         (window as any).getInitialTitle = async () => title;
         (window as any).getInitialActionLabel = async () => action;
-    }, initialText, options.title, options.action);
+        (window as any).isStartRecording = async () => startRecording;
+    }, initialText, options.title, options.action, options.startRecording);
 
     await page.exposeFunction('onComplete', (text: string) => {
       process.stdout.write(text + '\n');

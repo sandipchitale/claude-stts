@@ -1,6 +1,6 @@
 ---
-name: th
-description: Speak your prompt and hear the response - combined speech-to-text and text-to-speech
+name: thl
+description: Speak your prompt and hear the response - combined speech-to-text and text-to-speech. Keep looping until the user cancels the speech-to-text dialog.
 ---
 ## Step 1:
 
@@ -24,4 +24,7 @@ EOF
 
 Strip all Markdown formatting, code blocks, and special characters from the text before speaking - use only plain, readable text.
 
+## Step 5:
+
+Go back to Step 1 above.
 

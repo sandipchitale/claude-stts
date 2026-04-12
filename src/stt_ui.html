@@ -439,6 +439,11 @@
       const status = document.getElementById("status");
       const container = document.querySelector(".container");
 
+      let startRecording = false;
+      if (window.isStartRecording && window.isStartRecording()) {
+        startRecording = true;
+      }
+
       commandsBtn.onmousedown = (e) => e.preventDefault();
       commandsBtn.onclick = () => commandsPanel.classList.toggle("open");
       closePanel.onmousedown = (e) => e.preventDefault();
@@ -701,6 +706,9 @@
         }
       })();
 
+      if (startRecording) {
+        toggleDictation();
+      }
       input.focus();
     </script>
   </body>
