@@ -1,6 +1,6 @@
 {
   "name": "claude-stts-marketplace",
-  "owner": { "name": "developer" },
+  "owner": { "name": "Sandip Chitale" },
   "plugins": [
     {
       "name": "claude-stts",

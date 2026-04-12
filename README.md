@@ -7,6 +7,8 @@ A [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins) t
 - **Speech-to-Text (`/t`)** - Dictate your prompt using your microphone via a Chrome-based UI powered by the Web SpeechRecognition API
 - **Text-to-Speech (`/h`)** - Have Claude's response (or any text) spoken aloud using the browser's SpeechSynthesis API
 - **Combined STT + TTS (`/th`)** - Speak your prompt and automatically hear the response -- a full voice conversation flow
+- **Looping STT (`/tl`)** - Like `/t`, but keeps re-opening the dictation dialog after each prompt until you cancel it
+- **Looping STT + TTS (`/thl`)** - Like `/th`, but stays in a continuous speak-and-listen loop until you cancel the dialog
 
 ### Voice Commands (STT)
 
@@ -22,6 +24,8 @@ While dictating, you can use voice commands for hands-free editing:
 | `delete selection` | Deletes the selected text |
 | `undo it / redo it` | Undo or redo the last action |
 
+A built-in cheat sheet for these voice commands is also available via the 🗣️ button in the STT dialog.
+
 ### Keyboard Shortcuts (STT)
 
 | Shortcut | Action |
@@ -36,7 +40,13 @@ While dictating, you can use voice commands for hands-free editing:
 The plugin launches a Chrome instance (via [chrome-launcher](https://www.npmjs.com/package/chrome-launcher)) in app mode and connects to it using [puppeteer-core](https://www.npmjs.com/package/puppeteer-core). This approach leverages the browser's native `SpeechRecognition` and `SpeechSynthesis` APIs, which provide high-quality speech processing without requiring any external API keys or services.
 
 - **STT flow**: Opens a Chrome window with a textarea where you can type or dictate. Microphone permission is automatically granted via Puppeteer. When you click "Send" or press Enter, the text is printed to stdout, which Claude Code captures and processes as your prompt.
+
+~[Speak](screenshots/stt.png)
+
 - **TTS flow**: Opens a Chrome window that receives text via Puppeteer's `evaluateOnNewDocument`, then speaks it using `SpeechSynthesisUtterance`. Supports a `--oneshot` flag to automatically close after speaking.
+
+~[Hear](screenshots/tts.png)
+
 
 ## Architecture
 
@@ -46,8 +56,10 @@ claude-stts/
 │   └── plugin.json          # Plugin manifest
 ├── commands/
 │   ├── t.md                 # /t command - speech-to-text
+│   ├── tl.md                # /tl command - looping speech-to-text
 │   ├── h.md                 # /h command - text-to-speech
-│   └── th.md                # /th command - combined STT + TTS
+│   ├── th.md                # /th command - combined STT + TTS
+│   └── thl.md               # /thl command - looping STT + TTS
 ├── src/
 │   ├── chrome-sidekick.ts   # Chrome launcher and Puppeteer connection utilities
 │   ├── stt.ts               # STT entry point - launches Chrome with speech recognition UI
@@ -91,10 +103,13 @@ npm install
 npm run build   # bundles src/*.ts into dist/ via esbuild
 ```
 
-Then add it as a local plugin in Claude Code:
+Then add it as a local marketplace and plugin in Claude Code:
 
 ```bash
-claude plugin add /path/to/claude-stts
+git clone https://github.com/sandipchitale/claude-stts.git
+cd claude-stts
+claude plugin marketplace add /path/to/claude-stts
+claude plugin install claude-stts
 ```
 
 The build script (`build.mjs`) uses [esbuild](https://esbuild.github.io/) to bundle `src/stt.ts` and `src/tts.ts` into standalone ESM files under `dist/`, and copies the HTML UI assets alongside them. Re-run `npm run build` after any change in `src/`.
@@ -104,10 +119,19 @@ The build script (`build.mjs`) uses [esbuild](https://esbuild.github.io/) to bun
 Once installed, use the slash commands in Claude Code:
 
 ```
-/t              # Speak your prompt
-/h              # Hear Claude's last response
-/h some text    # Hear specific text spoken aloud
-/th             # Speak your prompt and hear the response
+/t [initial text]   # Speak your prompt
+/tl                 # Speak your prompt in a loop until cancelled
+/h                  # Hear Claude's last response
+/h prompy text      # Hear specific text spoken aloud
+/th [initial text]  # Speak your prompt and hear the response
+/thl [initial text] # Speak-and-hear in a loop until cancelled
+```
+
+All slash commands accept optional text arguments that pre-populate the dictation textarea, e.g.:
+
+```
+/t Write a haiku about
+/h The quick brown fox jumps over the lazy dog
 ```
 
 ## Dependencies
