@@ -2,6 +2,10 @@
 
 A [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins) that adds speech-to-text (STT) and text-to-speech (TTS) capabilities to the Claude Code CLI. Speak your prompts instead of typing them, and hear Claude's responses read aloud.
 
+If you are looking for gemini cli alternative... [claude-stts](https://github.com/sandipchitale/gemini-stts)
+
+![Works with both - claude code and gemini cli](screenshots/cc-gc-stts.png)
+
 ## Features
 
 - **Speech-to-Text (`/t`)** - Dictate your prompt using your microphone via a Chrome-based UI powered by the Web SpeechRecognition API

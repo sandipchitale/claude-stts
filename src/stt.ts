@@ -17,11 +17,23 @@ async function main() {
     .option('--title <title>', 'Title of the page', 'Type or dictate')
     .option('--action <label>', 'Label for the complete button', 'Send')
     .option('--start-recording', 'Start in recording mode')
+    .argument('[text...]', 'Initial text')
     .helpOption('-h, --help', 'Display help for command')
     .parse(process.argv);
 
   const options = program.opts();
-  const initialText = (program.args || []).join(' ');
+  let initialText = (program.args || []).join(' ');
+
+  if (!process.stdin.isTTY) {
+    const chunks: Buffer[] = [];
+    for await (const chunk of process.stdin) {
+      chunks.push(chunk as Buffer);
+    }
+    const stdinText = Buffer.concat(chunks).toString('utf-8');
+    if (stdinText) {
+      initialText = initialText ? `${initialText}\n${stdinText}` : stdinText;
+    }
+  }
 
   const uiPath = path.resolve(__dirname, 'stt_ui.html');
   const url = `file://${uiPath}`;

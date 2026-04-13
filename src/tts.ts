@@ -17,7 +17,7 @@ async function main() {
     .option('--title <title>', 'Title of the page', 'Speak')
     .option('--action <label>', 'Label for the action button', 'Stop & Exit')
     .option('--oneshot', 'Just speak the passed in text and exit')
-    .argument('[text...]', 'Text to speak')
+    .argument('[...]', 'Text to speak')
     .helpOption('-h, --help', 'Display help for command')
     .parse(process.argv);
 
